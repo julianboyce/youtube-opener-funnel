@@ -1,0 +1,10 @@
+export {AccentGeometry} from './AccentGeometry.jsx';
+export {KineticTextPreset} from './KineticTextPreset.jsx';
+export {KINETIC_TEXT_PRESET_BY_ID, KINETIC_TEXT_PRESETS} from './presets.js';
+export {MotionPath} from './MotionPath.jsx';
+export {SliceReveal} from './SliceReveal.jsx';
+export {splitTextUnits, StaggeredText} from './StaggeredText.jsx';
+export {TextCycle} from './TextCycle.jsx';
+export {TextOnPath} from './TextOnPath.jsx';
+export {TrackingText} from './TrackingText.jsx';
+export {TransformReveal} from './TransformReveal.jsx';
