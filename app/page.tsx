@@ -1,7 +1,9 @@
 'use client';
 
 import {FormEvent, useState} from 'react';
+import {Player} from '@remotion/player';
 import {Download, Link2, Play, Sparkles, Youtube} from 'lucide-react';
+import {DemoOpener} from '../remotion/DemoOpener';
 
 type Channel = {channelName: string; avatarUrl: string; source: string};
 
@@ -95,13 +97,18 @@ export default function Home() {
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {demoCards.map((_, index) => (
               <div key={index} className="relative aspect-[16/6.65] overflow-hidden rounded-2xl border border-white/80 bg-slate-200 shadow-[0_4px_12px_rgba(15,23,42,.08)]">
-                <img src="/opener-demo.png" alt="Static opener example" className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#081733]/45 via-transparent to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center gap-4 px-5 text-left text-white">
-                  <div className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-white/80 bg-white/15 shadow-lg backdrop-blur-sm"><span className="h-5 w-5 rounded-full bg-[#ffd333]" /></div>
-                  <span className="text-[clamp(1.1rem,2vw,1.65rem)] font-extrabold leading-[.9] tracking-[-.055em]">Adventure<br />Awaits</span>
-                </div>
-                <span className="absolute bottom-3 left-3 grid h-9 w-9 place-items-center rounded-full bg-white text-[#0d2341] shadow-sm"><Play size={15} fill="currentColor" /></span>
+                <Player
+                  component={DemoOpener}
+                  durationInFrames={150}
+                  compositionWidth={960}
+                  compositionHeight={400}
+                  fps={30}
+                  autoPlay
+                  loop
+                  className="h-full w-full"
+                  style={{width: '100%', height: '100%'}}
+                  acknowledgeRemotionLicense
+                />
               </div>
             ))}
           </div>
