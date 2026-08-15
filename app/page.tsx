@@ -74,26 +74,35 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-36 top-20 h-[22rem] w-[30rem] rounded-full bg-[radial-gradient(circle_at_55%_55%,rgba(130,225,235,.32),rgba(227,250,250,.12)_57%,transparent_70%)]" />
 
         <form onSubmit={handleSubmit} className="relative mx-auto mb-5 max-w-[1110px]">
-          <div className="flex items-center rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-[0_18px_48px_rgba(15,23,42,.14)] backdrop-blur">
-            <Youtube className="ml-3 shrink-0 fill-red-600 text-red-600" size={27} />
-            <input
-              id="channel-url"
-              aria-label="YouTube channel URL"
-              type="url"
-              required
-              value={channelUrl}
-              onChange={(event) => setChannelUrl(event.target.value)}
-              placeholder="Paste your YouTube channel URL"
-              className="h-12 min-w-0 flex-1 bg-transparent px-4 text-base text-slate-700 outline-none placeholder:text-slate-400 sm:text-lg"
-            />
-            <button type="submit" disabled={isLoading} className="flex h-12 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#f74e67] to-[#f64261] px-4 text-sm font-bold text-white shadow-[0_8px_16px_rgba(246,75,98,.22)] transition hover:brightness-105 disabled:opacity-70 sm:px-7 sm:text-base">
-              {isLoading ? 'Generating…' : 'Generate Openers'} <Sparkles size={17} />
-            </button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex min-w-0 flex-1 items-center rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-[0_18px_48px_rgba(15,23,42,.14)] backdrop-blur">
+              <Youtube className="ml-3 shrink-0 fill-red-600 text-red-600" size={27} />
+              <input
+                id="channel-url"
+                aria-label="YouTube channel URL"
+                type="url"
+                required
+                value={channelUrl}
+                onChange={(event) => setChannelUrl(event.target.value)}
+                placeholder="Paste your YouTube channel URL"
+                className="h-12 min-w-0 flex-1 bg-transparent px-4 text-base text-slate-700 outline-none placeholder:text-slate-400 sm:text-lg"
+              />
+              <button type="submit" disabled={isLoading} className="flex h-12 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#f74e67] to-[#f64261] px-4 text-sm font-bold text-white shadow-[0_8px_16px_rgba(246,75,98,.22)] transition hover:brightness-105 disabled:opacity-70 sm:px-7 sm:text-base">
+                {isLoading ? 'Generating…' : 'Generate Openers'} <Sparkles size={17} />
+              </button>
+            </div>
+            <button type="button" className="inline-flex h-[68px] shrink-0 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 text-base font-bold text-[#183253] shadow-[0_10px_25px_rgba(15,23,42,.09)] transition hover:bg-slate-50 sm:w-[205px]"><Download size={21} /> Download .mp4</button>
           </div>
           <p aria-live="polite" className="sr-only">{error}</p>
         </form>
 
         <YouTubeWatchPreview channel={channel} template={demoCards[0]} />
+
+        <section className="hidden relative mx-auto mt-4 grid max-w-[1110px] gap-5 rounded-[1.6rem] border border-slate-200 bg-white px-7 py-5 shadow-[0_10px_26px_rgba(15,23,42,.05)] sm:grid-cols-3 sm:gap-0 sm:px-10">
+          <HowItWorks icon={<Link2 />} title="1. Paste URL" copy="Add your YouTube channel URL above." color="text-[#f64b62]" bg="bg-rose-100" />
+          <HowItWorks icon={<Sparkles />} title="2. We Generate" copy="Our AI creates multiple unique openers based on your channel." color="text-[#f19a30]" bg="bg-amber-100" />
+          <HowItWorks icon={<Download />} title="3. Download" copy="Choose your favorite and download in high quality." color="text-[#59ad45]" bg="bg-green-100" />
+        </section>
 
         <section className="relative mx-auto mt-4 max-w-[1110px]">
           <div className="flex items-center gap-5 text-center">
@@ -124,11 +133,6 @@ export default function Home() {
           <p className="mt-4 text-center text-sm text-slate-500"><span className="mr-2 text-xl text-[#fb5569]">♡</span>Preview each style and pick your favorite. You can download it instantly.</p>
         </section>
 
-        <section className="relative mx-auto mt-4 grid max-w-[1080px] gap-5 rounded-[1.6rem] border border-slate-200 bg-white px-7 py-5 shadow-[0_10px_26px_rgba(15,23,42,.05)] sm:grid-cols-3 sm:gap-0 sm:px-10">
-          <HowItWorks icon={<Link2 />} title="1. Paste URL" copy="Add your YouTube channel URL above." color="text-[#f64b62]" bg="bg-rose-100" />
-          <HowItWorks icon={<Sparkles />} title="2. We Generate" copy="Our AI creates multiple unique openers based on your channel." color="text-[#f19a30]" bg="bg-amber-100" />
-          <HowItWorks icon={<Download />} title="3. Download" copy="Choose your favorite and download in high quality." color="text-[#59ad45]" bg="bg-green-100" />
-        </section>
       </div>
       {isModalOpen ? <OpenerModal channel={channel} template={selectedTemplate} onClose={() => setIsModalOpen(false)} /> : null}
       {isYouTubeModalOpen ? <YouTubeWatchModal channel={channel} template={selectedTemplate} onClose={() => setIsYouTubeModalOpen(false)} /> : null}
