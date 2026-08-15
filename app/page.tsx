@@ -209,8 +209,8 @@ function RelatedVideo({title, thumbnail, views}: {title: string; thumbnail: stri
 
 function HybridOpenerModal({channel, template, onClose}: {channel: Channel; template: DemoCard; onClose: () => void}) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/35 p-4 backdrop-blur-sm sm:p-8" onMouseDown={onClose}>
-      <section role="dialog" aria-modal="true" aria-labelledby="hybrid-modal-title" className="relative grid max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] bg-white shadow-[0_32px_100px_rgba(15,23,42,.28)] lg:grid-cols-[.88fr_1.45fr]" onMouseDown={(event) => event.stopPropagation()}>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/35 p-2 backdrop-blur-sm sm:p-6" onMouseDown={onClose}>
+      <section role="dialog" aria-modal="true" aria-labelledby="hybrid-modal-title" className="relative grid h-[94vh] w-full max-w-[1500px] overflow-y-auto rounded-2xl bg-white shadow-[0_32px_100px_rgba(15,23,42,.28)] lg:grid-cols-[.88fr_1.45fr]" onMouseDown={(event) => event.stopPropagation()}>
         <button type="button" onClick={onClose} aria-label="Close opener preview" className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"><X size={19} /></button>
         <div className="flex min-h-[390px] flex-col justify-between p-8 sm:p-11">
           <div>
