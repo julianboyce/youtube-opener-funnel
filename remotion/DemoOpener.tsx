@@ -1,16 +1,15 @@
 import React from 'react';
-import {AbsoluteFill, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {KINETIC_TEXT_PRESETS, KineticTextPreset} from './motion/text';
+import {AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {KineticTextPreset} from './motion/text';
 
 const KineticPreset = KineticTextPreset as React.ComponentType<any>;
-const framesPerTransition = 60;
-
-export const DEMO_OPENER_DURATION_IN_FRAMES = KINETIC_TEXT_PRESETS.length * framesPerTransition;
+export const DEMO_OPENER_DURATION_IN_FRAMES = 60;
 
 export type DemoOpenerProps = {
   channelName: string;
   avatarUrl: string;
   backgroundSrc: string;
+  preset: string;
 };
 
 const ChannelIdentity: React.FC<Pick<DemoOpenerProps, 'channelName' | 'avatarUrl'>> = ({channelName, avatarUrl}) => {
@@ -26,24 +25,20 @@ const ChannelIdentity: React.FC<Pick<DemoOpenerProps, 'channelName' | 'avatarUrl
   );
 };
 
-export const DemoOpener: React.FC<DemoOpenerProps> = ({channelName, avatarUrl, backgroundSrc}) => (
+export const DemoOpener: React.FC<DemoOpenerProps> = ({channelName, avatarUrl, backgroundSrc, preset}) => (
   <AbsoluteFill style={{overflow: 'hidden', background: '#0a1022'}}>
     <Img src={staticFile(backgroundSrc)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
     <AbsoluteFill style={{background: 'linear-gradient(90deg, rgba(6,13,29,.30), rgba(6,13,29,.04) 75%)'}} />
-    {KINETIC_TEXT_PRESETS.map((preset, index) => (
-      <Sequence key={preset.id} from={index * framesPerTransition} durationInFrames={framesPerTransition}>
-        <KineticPreset
-          preset={preset.id}
-          primary={channelName}
-          secondary="VIEWER RETENTION"
-          tertiary={channelName}
-          words={[channelName, 'VIEWER RETENTION', channelName]}
-          accent="#ffd436"
-          foreground="#ffffff"
-          durationInFrames={framesPerTransition}
-        />
-        <ChannelIdentity channelName={channelName} avatarUrl={avatarUrl} />
-      </Sequence>
-    ))}
+    <KineticPreset
+      preset={preset}
+      primary={channelName}
+      secondary="VIEWER RETENTION"
+      tertiary={channelName}
+      words={[channelName, 'VIEWER RETENTION', channelName]}
+      accent="#ffd436"
+      foreground="#ffffff"
+      durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
+    />
+    <ChannelIdentity channelName={channelName} avatarUrl={avatarUrl} />
   </AbsoluteFill>
 );

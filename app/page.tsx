@@ -15,12 +15,12 @@ const starterChannel: Channel = {
 };
 
 const demoCards = [
-  {id: 'topographic', backgroundSrc: 'opener-topographic.png'},
-  {id: 'mountain', backgroundSrc: 'opener-demo.png'},
-  {id: 'ocean', backgroundSrc: 'opener-ocean.png'},
-  {id: 'neon', backgroundSrc: 'opener-neon.png'},
-  {id: 'paper', backgroundSrc: 'opener-paper.png'},
-  {id: 'bokeh', backgroundSrc: 'opener-bokeh.png'},
+  {id: 'topographic', backgroundSrc: 'opener-topographic.png', preset: 'radial-badge'},
+  {id: 'mountain', backgroundSrc: 'opener-demo.png', preset: 'pivot-stack'},
+  {id: 'ocean', backgroundSrc: 'opener-ocean.png', preset: 'impact-cycle'},
+  {id: 'neon', backgroundSrc: 'opener-neon.png', preset: 'split-quote'},
+  {id: 'paper', backgroundSrc: 'opener-paper.png', preset: 'glyph-orbit'},
+  {id: 'bokeh', backgroundSrc: 'opener-bokeh.png', preset: 'emphasis-stack'},
 ] as const;
 
 type DemoCard = (typeof demoCards)[number];
@@ -111,7 +111,7 @@ export default function Home() {
                 <Player
                   key={`${template.id}-${channel.channelName}-${channel.avatarUrl}`}
                   component={DemoOpener}
-                  inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc}}
+                  inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc, preset: template.preset}}
                   durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
                   compositionWidth={960}
                   compositionHeight={400}
@@ -157,7 +157,7 @@ function OpenerModal({channel, template, onClose}: {channel: Channel; template: 
             <Player
               key={`modal-${template.id}-${channel.channelName}-${channel.avatarUrl}`}
               component={DemoOpener}
-              inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc}}
+              inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc, preset: template.preset}}
               durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
               compositionWidth={960}
               compositionHeight={400}
@@ -173,7 +173,7 @@ function OpenerModal({channel, template, onClose}: {channel: Channel; template: 
           <div className="hidden lg:block" />
           <div>
             <p className="max-w-xl text-sm leading-relaxed text-slate-600">Your channel profile and name are brought on with the same energetic typography movement shown in the opener gallery.</p>
-            <dl className="mt-6 grid grid-cols-[96px_1fr] gap-y-2 text-sm"><dt className="font-medium text-slate-800">Duration</dt><dd className="text-slate-500">30 seconds</dd><dt className="font-medium text-slate-800">Ratio</dt><dd className="text-slate-500">16:9</dd></dl>
+            <dl className="mt-6 grid grid-cols-[96px_1fr] gap-y-2 text-sm"><dt className="font-medium text-slate-800">Duration</dt><dd className="text-slate-500">2 seconds</dd><dt className="font-medium text-slate-800">Ratio</dt><dd className="text-slate-500">16:9</dd></dl>
           </div>
         </div>
       </section>
