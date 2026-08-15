@@ -74,8 +74,8 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-36 top-20 h-[22rem] w-[30rem] rounded-full bg-[radial-gradient(circle_at_55%_55%,rgba(130,225,235,.32),rgba(227,250,250,.12)_57%,transparent_70%)]" />
 
         <form onSubmit={handleSubmit} className="relative mx-auto mb-5 max-w-[1110px]">
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <div className="flex min-w-0 flex-1 items-center rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-[0_18px_48px_rgba(15,23,42,.14)] backdrop-blur">
+          <div className="flex flex-col rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-[0_18px_48px_rgba(15,23,42,.14)] backdrop-blur sm:flex-row sm:items-center">
+            <div className="flex min-w-0 flex-1 items-center">
               <Youtube className="ml-3 shrink-0 fill-red-600 text-red-600" size={27} />
               <input
                 id="channel-url"
@@ -91,7 +91,11 @@ export default function Home() {
                 {isLoading ? 'Generating…' : 'Generate Openers'} <Sparkles size={17} />
               </button>
             </div>
-            <button type="button" className="inline-flex h-[68px] shrink-0 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 text-base font-bold text-[#183253] shadow-[0_10px_25px_rgba(15,23,42,.09)] transition hover:bg-slate-50 sm:w-[205px]"><Download size={21} /> Download .mp4</button>
+            <div className="ml-7 mr-0 h-px bg-slate-200 sm:my-3 sm:h-10 sm:w-px" />
+            <div className="group relative shrink-0">
+              <button type="button" aria-describedby="download-opener-tooltip" className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-white py-0 pl-2 pr-5 text-base font-bold text-[#183253] transition hover:bg-slate-50 sm:w-[205px]"><Download size={21} /> Get Your Opener</button>
+              <div id="download-opener-tooltip" role="tooltip" className="pointer-events-none absolute bottom-[calc(100%+10px)] left-1/2 z-10 w-max -translate-x-1/2 rounded-xl bg-slate-900 px-4 py-2 text-center text-sm font-medium leading-snug text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">Get Your Opener<br />MP4</div>
+            </div>
           </div>
           <p aria-live="polite" className="sr-only">{error}</p>
         </form>
