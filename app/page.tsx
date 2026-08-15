@@ -32,6 +32,7 @@ export default function Home() {
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isYouTubeModalOpen, setIsYouTubeModalOpen] = useState(false);
+  const [isHybridModalOpen, setIsHybridModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<DemoCard>(demoCards[0]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -108,7 +109,7 @@ export default function Home() {
           </div>
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {demoCards.map((template, index) => (
-              <button key={template.id} type="button" onClick={() => { setSelectedTemplate(template); index < 3 ? setIsYouTubeModalOpen(true) : setIsModalOpen(true); }} aria-label={`Open ${channel.channelName} opener preview`} className="relative aspect-[16/6.65] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/80 bg-slate-200 text-left shadow-[0_4px_12px_rgba(15,23,42,.08)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(15,23,42,.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#f64b62]/40">
+              <button key={template.id} type="button" onClick={() => { setSelectedTemplate(template); if (index < 2) setIsYouTubeModalOpen(true); else if (index < 4) setIsModalOpen(true); else setIsHybridModalOpen(true); }} aria-label={`Open ${channel.channelName} opener preview`} className="relative aspect-[16/6.65] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/80 bg-slate-200 text-left shadow-[0_4px_12px_rgba(15,23,42,.08)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(15,23,42,.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#f64b62]/40">
                 <Player
                   key={`${template.id}-${channel.channelName}-${channel.avatarUrl}`}
                   component={DemoOpener}
@@ -137,6 +138,7 @@ export default function Home() {
       </div>
       {isModalOpen ? <OpenerModal channel={channel} template={selectedTemplate} onClose={() => setIsModalOpen(false)} /> : null}
       {isYouTubeModalOpen ? <YouTubeWatchModal channel={channel} template={selectedTemplate} onClose={() => setIsYouTubeModalOpen(false)} /> : null}
+      {isHybridModalOpen ? <HybridOpenerModal channel={channel} template={selectedTemplate} onClose={() => setIsHybridModalOpen(false)} /> : null}
     </main>
   );
 }
@@ -203,6 +205,57 @@ function RelatedVideo({title, thumbnail, views}: {title: string; thumbnail: stri
     <div className="relative aspect-video overflow-hidden rounded-lg bg-slate-900"><img src="/engagement-video-generic.png" alt="Abstract creator engagement visual" className="h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/5 to-transparent" /><span className="absolute bottom-2 left-2 right-2 text-xs font-black leading-none tracking-[-.04em] text-white">{thumbnail}</span><span className="absolute bottom-1 right-1 rounded bg-black/85 px-1.5 py-0.5 text-[10px] font-medium text-white">8:42</span></div>
     <div className="min-w-0"><h3 className="line-clamp-2 text-sm font-bold leading-snug text-slate-950">{title}</h3><p className="mt-1 text-xs text-slate-500">Creator Growth Lab</p><p className="text-xs text-slate-500">{views}</p></div>
   </article>;
+}
+
+function HybridOpenerModal({channel, template, onClose}: {channel: Channel; template: DemoCard; onClose: () => void}) {
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/35 p-4 backdrop-blur-sm sm:p-8" onMouseDown={onClose}>
+      <section role="dialog" aria-modal="true" aria-labelledby="hybrid-modal-title" className="relative grid max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] bg-white shadow-[0_32px_100px_rgba(15,23,42,.28)] lg:grid-cols-[.88fr_1.45fr]" onMouseDown={(event) => event.stopPropagation()}>
+        <button type="button" onClick={onClose} aria-label="Close opener preview" className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"><X size={19} /></button>
+        <div className="flex min-h-[390px] flex-col justify-between p-8 sm:p-11">
+          <div>
+            <span className="rounded bg-violet-100 px-2 py-0.5 text-xs font-bold text-violet-700">Free</span>
+            <h2 id="hybrid-modal-title" className="mt-28 text-4xl font-extrabold leading-[.94] tracking-[-.075em] text-slate-950 sm:text-5xl">{channel.channelName}<br />Opener</h2>
+            <button type="button" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#17171d] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#2d2d35]"><Download size={17} /> Download as .mp4</button>
+          </div>
+          <p className="mt-12 max-w-xs text-sm leading-relaxed text-slate-500">A kinetic opener using your channel profile image and name, ready to make the first seconds count.</p>
+        </div>
+        <div className="flex min-h-[390px] items-center justify-center bg-[#f3f3f5] p-6 pt-16 sm:p-10 sm:pt-16">
+          <div className="grid w-full max-w-[720px] gap-4 xl:grid-cols-[minmax(0,1fr)_160px]">
+            <div className="min-w-0">
+              <div className="overflow-hidden rounded-xl bg-black shadow-[0_18px_45px_rgba(15,23,42,.16)]">
+                <Player
+                  key={`hybrid-${template.id}-${channel.channelName}-${channel.avatarUrl}`}
+                  component={DemoOpener}
+                  inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc, preset: template.preset}}
+                  durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
+                  compositionWidth={960}
+                  compositionHeight={540}
+                  fps={30}
+                  autoPlay
+                  loop
+                  style={{width: '100%', aspectRatio: '16 / 9'}}
+                  acknowledgeRemotionLicense
+                />
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-3"><div className="min-w-0"><p className="truncate text-sm font-bold text-slate-950">The 5-Minute Opener Formula</p><p className="text-xs text-slate-500">18K views · 1 day ago</p></div><Action icon={<ThumbsUp size={15} />} label="12K" /></div>
+            </div>
+            <aside className="hidden space-y-3 xl:block">
+              {relatedVideos.slice(0, 2).map((video) => <MiniRelatedVideo key={video.title} {...video} />)}
+            </aside>
+          </div>
+        </div>
+        <div className="border-t border-slate-100 p-8 lg:col-span-2 lg:grid lg:grid-cols-[.88fr_1.45fr] lg:gap-12 lg:px-11">
+          <div className="hidden lg:block" />
+          <div><p className="max-w-xl text-sm leading-relaxed text-slate-600">Your channel profile and name are brought on with the same energetic typography movement shown in the opener gallery.</p><dl className="mt-6 grid grid-cols-[96px_1fr] gap-y-2 text-sm"><dt className="font-medium text-slate-800">Duration</dt><dd className="text-slate-500">2 seconds</dd><dt className="font-medium text-slate-800">Ratio</dt><dd className="text-slate-500">16:9</dd></dl></div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function MiniRelatedVideo({title, thumbnail}: Pick<(typeof relatedVideos)[number], 'title' | 'thumbnail'>) {
+  return <article><div className="relative aspect-video overflow-hidden rounded-md"><img src="/engagement-video-generic.png" alt="Abstract creator engagement visual" className="h-full w-full object-cover" /><span className="absolute bottom-1 left-1 right-1 text-[9px] font-black leading-none text-white">{thumbnail}</span></div><p className="mt-1 line-clamp-2 text-xs font-bold leading-tight text-slate-900">{title}</p><p className="mt-0.5 text-[10px] text-slate-500">Creator Growth Lab</p></article>;
 }
 
 function OpenerModal({channel, template, onClose}: {channel: Channel; template: DemoCard; onClose: () => void}) {
