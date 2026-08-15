@@ -1,5 +1,3 @@
-'use client';
-
 import {FormEvent, useState} from 'react';
 import {Player} from '@remotion/player';
 import {Bell, Bookmark, Download, Link2, Menu, Mic, MoreHorizontal, Play, Search, Share2, Sparkles, ThumbsUp, X, Youtube} from 'lucide-react';
@@ -94,7 +92,7 @@ export default function Home() {
             <div className="ml-7 mr-0 h-px bg-slate-200 sm:my-3 sm:h-10 sm:w-px" />
             <div className="group relative shrink-0">
               <button type="button" aria-describedby="download-opener-tooltip" className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-white py-0 pl-2 pr-5 text-base font-bold text-[#183253] transition hover:bg-slate-50 sm:w-[205px]"><Download size={21} /> Get Your Opener</button>
-              <div id="download-opener-tooltip" role="tooltip" className="pointer-events-none absolute bottom-[calc(100%+10px)] left-1/2 z-10 w-max -translate-x-1/2 rounded-xl bg-slate-900 px-4 py-2 text-center text-sm font-medium leading-snug text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">Get Your Opener<br />MP4</div>
+              <div id="download-opener-tooltip" role="tooltip" className="pointer-events-none absolute left-1/2 top-[calc(100%+10px)] z-10 w-max -translate-x-1/2 rounded-xl bg-slate-900 px-4 py-2 text-center text-sm font-medium leading-snug text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">Get Your Opener<br />MP4</div>
             </div>
           </div>
           <p aria-live="polite" className="sr-only">{error}</p>
