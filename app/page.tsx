@@ -65,7 +65,7 @@ export default function Home() {
         </div>
         <div className="hidden items-center gap-10 text-sm font-medium text-slate-800 md:flex">
           <span>Examples</span><span>How it works</span><span>Pricing</span><span>FAQ</span>
-          <span className="rounded-xl bg-[#f64b62] px-5 py-3 font-semibold text-white shadow-[0_8px_16px_rgba(246,75,98,.22)]">Get Started</span>
+          <span className="hidden rounded-xl bg-[#f64b62] px-5 py-3 font-semibold text-white shadow-[0_8px_16px_rgba(246,75,98,.22)]">Get Started</span>
         </div>
       </nav>
 
@@ -74,10 +74,10 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-36 top-20 h-[22rem] w-[30rem] rounded-full bg-[radial-gradient(circle_at_55%_55%,rgba(130,225,235,.32),rgba(227,250,250,.12)_57%,transparent_70%)]" />
 
         <section className="relative mx-auto max-w-4xl pt-1 text-center sm:pt-3">
-          <h1 className="text-balance text-[clamp(2.8rem,5.1vw,5rem)] font-extrabold leading-[1.04] tracking-[-.07em] text-[#0a1f3d]">
+          <h1 className="hidden text-balance text-[clamp(2.8rem,5.1vw,5rem)] font-extrabold leading-[1.04] tracking-[-.07em] text-[#0a1f3d]">
             Create a beautiful opener<br className="hidden sm:block" /> for your <span className="bg-gradient-to-r from-[#fa4e67] via-[#fa6d79] to-[#f3a133] bg-clip-text text-transparent">YouTube channel.</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-500 sm:text-xl">Paste your channel URL and we&apos;ll automatically create<br className="hidden sm:block" /> custom motion graphic openers in seconds.</p>
+          <p className="hidden mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-500 sm:text-xl">Paste your channel URL and we&apos;ll automatically create<br className="hidden sm:block" /> custom motion graphic openers in seconds.</p>
 
           <form onSubmit={handleSubmit} className="mx-auto mt-5 max-w-3xl">
             <div className="flex items-center rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_30px_rgba(15,23,42,.07)]">
@@ -96,10 +96,12 @@ export default function Home() {
                 {isLoading ? 'Generating…' : 'Generate Openers'} <Sparkles size={17} />
               </button>
             </div>
-            <p className="mt-3 flex items-center justify-center gap-2 text-sm text-slate-500">⌑ Secure. We only use public channel data.</p>
+            <p className="hidden mt-3 flex items-center justify-center gap-2 text-sm text-slate-500">⌑ Secure. We only use public channel data.</p>
             <p aria-live="polite" className="sr-only">{error}</p>
           </form>
         </section>
+
+        <YouTubeWatchPreview channel={channel} template={demoCards[0]} />
 
         <section className="relative mx-auto mt-4 max-w-[1110px]">
           <div className="flex items-center gap-5 text-center">
@@ -149,6 +151,47 @@ const relatedVideos = [
   {title: 'The Engagement System Creators Use on Every Upload', thumbnail: 'MORE ENGAGEMENT', views: '246K views · 1 week ago'},
   {title: 'The Hook Framework That Makes Viewers Keep Watching', thumbnail: 'STOP THE SCROLL', views: '71K views · 2 weeks ago'},
 ];
+
+function YouTubeWatchPreview({channel, template}: {channel: Channel; template: DemoCard}) {
+  return (
+    <section aria-label="Live YouTube watch preview" className="relative mx-auto mt-8 max-w-[1110px] overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-[0_14px_34px_rgba(15,23,42,.08)]">
+      <header className="flex h-14 items-center gap-3 border-b border-slate-100 px-4 sm:px-5">
+        <Menu size={19} className="shrink-0" />
+        <div className="flex items-center gap-1 text-lg font-bold tracking-[-.07em] text-black"><span className="grid h-5 w-8 place-items-center rounded-[6px] bg-red-600 text-white"><Play size={10} fill="currentColor" /></span>YouTube</div>
+        <div className="mx-auto hidden max-w-[360px] flex-1 items-center sm:flex"><div className="flex h-8 flex-1 items-center rounded-l-full border border-slate-300 px-3 text-xs text-slate-500">Search</div><span className="grid h-8 w-10 place-items-center rounded-r-full border border-l-0 border-slate-300 bg-slate-50"><Search size={16} /></span></div>
+        <div className="ml-auto flex items-center gap-3"><Bell size={18} /><span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-red-600 to-rose-400 text-[10px] font-black text-white">OM</span></div>
+      </header>
+      <div className="grid gap-5 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <div className="min-w-0">
+          <div className="overflow-hidden rounded-xl bg-black">
+            <Player
+              key={`page-youtube-${template.id}-${channel.channelName}-${channel.avatarUrl}`}
+              component={DemoOpener}
+              inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc, preset: template.preset}}
+              durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
+              compositionWidth={960}
+              compositionHeight={540}
+              fps={30}
+              autoPlay
+              loop
+              style={{width: '100%', aspectRatio: '16 / 9'}}
+              acknowledgeRemotionLicense
+            />
+          </div>
+          <h2 className="mt-3 text-base font-bold tracking-[-.03em] text-slate-950 sm:text-lg">The 5-Minute Opener Formula That Keeps Viewers Watching</h2>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+            <div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-red-600 to-rose-400 text-[10px] font-black text-white">OM</span><div><p className="text-sm font-semibold text-slate-950">Opener Maker</p><p className="text-[11px] text-slate-500">1.24M subscribers</p></div><span className="ml-2 rounded-full bg-black px-3 py-1.5 text-xs font-semibold text-white">Subscribe</span></div>
+            <div className="flex items-center gap-2"><Action icon={<ThumbsUp size={15} />} label="12K" /><Action icon={<Share2 size={15} />} label="Share" /></div>
+          </div>
+        </div>
+        <aside className="space-y-3">
+          <div className="flex gap-2 overflow-hidden"><span className="rounded-lg bg-black px-3 py-1.5 text-xs font-semibold text-white">All</span><span className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold">Engagement</span></div>
+          {relatedVideos.slice(0, 3).map((video) => <RelatedVideo key={video.title} {...video} />)}
+        </aside>
+      </div>
+    </section>
+  );
+}
 
 function YouTubeWatchModal({channel, template, onClose}: {channel: Channel; template: DemoCard; onClose: () => void}) {
   return (
