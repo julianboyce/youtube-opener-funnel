@@ -3,7 +3,7 @@
 import {FormEvent, useState} from 'react';
 import {Player} from '@remotion/player';
 import {Download, Link2, Play, Sparkles, X, Youtube} from 'lucide-react';
-import {DemoOpener} from '../remotion/DemoOpener';
+import {DEMO_OPENER_DURATION_IN_FRAMES, DemoOpener} from '../remotion/DemoOpener';
 
 type Channel = {channelName: string; avatarUrl: string; source: string};
 
@@ -14,7 +14,16 @@ const starterChannel: Channel = {
   source: 'youtube-api',
 };
 
-const demoCards = Array.from({length: 6});
+const demoCards = [
+  {id: 'topographic', backgroundSrc: 'opener-topographic.png'},
+  {id: 'mountain', backgroundSrc: 'opener-demo.png'},
+  {id: 'ocean', backgroundSrc: 'opener-ocean.png'},
+  {id: 'neon', backgroundSrc: 'opener-neon.png'},
+  {id: 'paper', backgroundSrc: 'opener-paper.png'},
+  {id: 'bokeh', backgroundSrc: 'opener-bokeh.png'},
+] as const;
+
+type DemoCard = (typeof demoCards)[number];
 
 export default function Home() {
   const [channelUrl, setChannelUrl] = useState(INITIAL_URL);
@@ -22,6 +31,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<DemoCard>(demoCards[0]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -96,13 +106,13 @@ export default function Home() {
             <div className="h-px flex-1 bg-slate-200" />
           </div>
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {demoCards.map((_, index) => (
-              <button key={index} type="button" onClick={() => setIsModalOpen(true)} aria-label={`Open ${channel.channelName} opener preview`} className="relative aspect-[16/6.65] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/80 bg-slate-200 text-left shadow-[0_4px_12px_rgba(15,23,42,.08)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(15,23,42,.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#f64b62]/40">
+            {demoCards.map((template) => (
+              <button key={template.id} type="button" onClick={() => { setSelectedTemplate(template); setIsModalOpen(true); }} aria-label={`Open ${channel.channelName} opener preview`} className="relative aspect-[16/6.65] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/80 bg-slate-200 text-left shadow-[0_4px_12px_rgba(15,23,42,.08)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(15,23,42,.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#f64b62]/40">
                 <Player
-                  key={`${channel.channelName}-${channel.avatarUrl}`}
+                  key={`${template.id}-${channel.channelName}-${channel.avatarUrl}`}
                   component={DemoOpener}
-                  inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl}}
-                  durationInFrames={150}
+                  inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc}}
+                  durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
                   compositionWidth={960}
                   compositionHeight={400}
                   fps={30}
@@ -124,12 +134,12 @@ export default function Home() {
           <HowItWorks icon={<Download />} title="3. Download" copy="Choose your favorite and download in high quality." color="text-[#59ad45]" bg="bg-green-100" />
         </section>
       </div>
-      {isModalOpen ? <OpenerModal channel={channel} onClose={() => setIsModalOpen(false)} /> : null}
+      {isModalOpen ? <OpenerModal channel={channel} template={selectedTemplate} onClose={() => setIsModalOpen(false)} /> : null}
     </main>
   );
 }
 
-function OpenerModal({channel, onClose}: {channel: Channel; onClose: () => void}) {
+function OpenerModal({channel, template, onClose}: {channel: Channel; template: DemoCard; onClose: () => void}) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/35 p-4 backdrop-blur-sm sm:p-8" onMouseDown={onClose}>
       <section role="dialog" aria-modal="true" aria-labelledby="opener-modal-title" className="relative grid max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] bg-white shadow-[0_32px_100px_rgba(15,23,42,.28)] lg:grid-cols-[.88fr_1.45fr]" onMouseDown={(event) => event.stopPropagation()}>
@@ -145,10 +155,10 @@ function OpenerModal({channel, onClose}: {channel: Channel; onClose: () => void}
         <div className="flex min-h-[390px] items-center justify-center bg-[#f3f3f5] p-8 sm:p-14">
           <div className="w-full max-w-[680px] overflow-hidden rounded-xl bg-slate-900 shadow-[0_18px_45px_rgba(15,23,42,.16)]">
             <Player
-              key={`modal-${channel.channelName}-${channel.avatarUrl}`}
+              key={`modal-${template.id}-${channel.channelName}-${channel.avatarUrl}`}
               component={DemoOpener}
-              inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl}}
-              durationInFrames={150}
+              inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc}}
+              durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
               compositionWidth={960}
               compositionHeight={400}
               fps={30}
@@ -163,7 +173,7 @@ function OpenerModal({channel, onClose}: {channel: Channel; onClose: () => void}
           <div className="hidden lg:block" />
           <div>
             <p className="max-w-xl text-sm leading-relaxed text-slate-600">Your channel profile and name are brought on with the same energetic typography movement shown in the opener gallery.</p>
-            <dl className="mt-6 grid grid-cols-[96px_1fr] gap-y-2 text-sm"><dt className="font-medium text-slate-800">Duration</dt><dd className="text-slate-500">5 seconds</dd><dt className="font-medium text-slate-800">Ratio</dt><dd className="text-slate-500">16:9</dd></dl>
+            <dl className="mt-6 grid grid-cols-[96px_1fr] gap-y-2 text-sm"><dt className="font-medium text-slate-800">Duration</dt><dd className="text-slate-500">30 seconds</dd><dt className="font-medium text-slate-800">Ratio</dt><dd className="text-slate-500">16:9</dd></dl>
           </div>
         </div>
       </section>
