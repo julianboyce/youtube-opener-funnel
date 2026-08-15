@@ -2,7 +2,7 @@
 
 import {FormEvent, useState} from 'react';
 import {Player} from '@remotion/player';
-import {Download, Link2, Play, Sparkles, Youtube} from 'lucide-react';
+import {Download, Link2, Play, Sparkles, X, Youtube} from 'lucide-react';
 import {DemoOpener} from '../remotion/DemoOpener';
 
 type Channel = {channelName: string; avatarUrl: string; source: string};
@@ -18,9 +18,10 @@ const demoCards = Array.from({length: 6});
 
 export default function Home() {
   const [channelUrl, setChannelUrl] = useState(INITIAL_URL);
-  const [, setChannel] = useState<Channel>(starterChannel);
+  const [channel, setChannel] = useState<Channel>(starterChannel);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -96,9 +97,11 @@ export default function Home() {
           </div>
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {demoCards.map((_, index) => (
-              <div key={index} className="relative aspect-[16/6.65] overflow-hidden rounded-2xl border border-white/80 bg-slate-200 shadow-[0_4px_12px_rgba(15,23,42,.08)]">
+              <button key={index} type="button" onClick={() => setIsModalOpen(true)} aria-label={`Open ${channel.channelName} opener preview`} className="relative aspect-[16/6.65] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/80 bg-slate-200 text-left shadow-[0_4px_12px_rgba(15,23,42,.08)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(15,23,42,.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#f64b62]/40">
                 <Player
+                  key={`${channel.channelName}-${channel.avatarUrl}`}
                   component={DemoOpener}
+                  inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl}}
                   durationInFrames={150}
                   compositionWidth={960}
                   compositionHeight={400}
@@ -109,7 +112,7 @@ export default function Home() {
                   style={{width: '100%', height: '100%'}}
                   acknowledgeRemotionLicense
                 />
-              </div>
+              </button>
             ))}
           </div>
           <p className="mt-4 text-center text-sm text-slate-500"><span className="mr-2 text-xl text-[#fb5569]">♡</span>Preview each style and pick your favorite. You can download it instantly.</p>
@@ -121,7 +124,50 @@ export default function Home() {
           <HowItWorks icon={<Download />} title="3. Download" copy="Choose your favorite and download in high quality." color="text-[#59ad45]" bg="bg-green-100" />
         </section>
       </div>
+      {isModalOpen ? <OpenerModal channel={channel} onClose={() => setIsModalOpen(false)} /> : null}
     </main>
+  );
+}
+
+function OpenerModal({channel, onClose}: {channel: Channel; onClose: () => void}) {
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/35 p-4 backdrop-blur-sm sm:p-8" onMouseDown={onClose}>
+      <section role="dialog" aria-modal="true" aria-labelledby="opener-modal-title" className="relative grid max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] bg-white shadow-[0_32px_100px_rgba(15,23,42,.28)] lg:grid-cols-[.88fr_1.45fr]" onMouseDown={(event) => event.stopPropagation()}>
+        <button type="button" onClick={onClose} aria-label="Close opener preview" className="absolute right-5 top-5 z-10 grid h-10 w-10 place-items-center rounded-full bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"><X size={19} /></button>
+        <div className="flex min-h-[390px] flex-col justify-between p-8 sm:p-11">
+          <div>
+            <span className="rounded bg-violet-100 px-2 py-0.5 text-xs font-bold text-violet-700">Free</span>
+            <h2 id="opener-modal-title" className="mt-28 text-4xl font-extrabold leading-[.94] tracking-[-.075em] text-slate-950 sm:text-5xl">{channel.channelName}<br />Opener</h2>
+            <button type="button" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#17171d] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#2d2d35]"><Download size={17} /> Download as .mp4</button>
+          </div>
+          <p className="mt-12 max-w-xs text-sm leading-relaxed text-slate-500">A kinetic opener using your channel profile image and name, ready to make the first seconds count.</p>
+        </div>
+        <div className="flex min-h-[390px] items-center justify-center bg-[#f3f3f5] p-8 sm:p-14">
+          <div className="w-full max-w-[680px] overflow-hidden rounded-xl bg-slate-900 shadow-[0_18px_45px_rgba(15,23,42,.16)]">
+            <Player
+              key={`modal-${channel.channelName}-${channel.avatarUrl}`}
+              component={DemoOpener}
+              inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl}}
+              durationInFrames={150}
+              compositionWidth={960}
+              compositionHeight={400}
+              fps={30}
+              autoPlay
+              loop
+              style={{width: '100%', aspectRatio: '16 / 6.65'}}
+              acknowledgeRemotionLicense
+            />
+          </div>
+        </div>
+        <div className="border-t border-slate-100 p-8 lg:col-span-2 lg:grid lg:grid-cols-[.88fr_1.45fr] lg:gap-12 lg:px-11">
+          <div className="hidden lg:block" />
+          <div>
+            <p className="max-w-xl text-sm leading-relaxed text-slate-600">Your channel profile and name are brought on with the same energetic typography movement shown in the opener gallery.</p>
+            <dl className="mt-6 grid grid-cols-[96px_1fr] gap-y-2 text-sm"><dt className="font-medium text-slate-800">Duration</dt><dd className="text-slate-500">5 seconds</dd><dt className="font-medium text-slate-800">Ratio</dt><dd className="text-slate-500">16:9</dd></dl>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
