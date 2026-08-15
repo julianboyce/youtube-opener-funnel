@@ -168,11 +168,11 @@ function YouTubeWatchModal({channel, template, onClose}: {channel: Channel; temp
                 inputProps={{channelName: channel.channelName, avatarUrl: channel.avatarUrl, backgroundSrc: template.backgroundSrc, preset: template.preset}}
                 durationInFrames={DEMO_OPENER_DURATION_IN_FRAMES}
                 compositionWidth={960}
-                compositionHeight={400}
+                compositionHeight={540}
                 fps={30}
                 autoPlay
                 loop
-                style={{width: '100%', aspectRatio: '16 / 6.65'}}
+                style={{width: '100%', aspectRatio: '16 / 9'}}
                 acknowledgeRemotionLicense
               />
             </div>
